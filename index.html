@@ -3,9 +3,9 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>SYSTEM MAINTENANCE // CORE_UPGRADE</title>
+    <title>1.1.1.1</title>
     <style>
-        @import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Share+Tech+Mono&display=swap');
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600&family=JetBrains+Mono:wght@300;500&display=swap');
 
         * {
             box-sizing: border-box;
@@ -14,9 +14,9 @@
         }
 
         body {
-            background-color: #05050a;
-            color: #00ffcc;
-            font-family: 'Share Tech Mono', monospace;
+            background-color: #060913;
+            color: #f3f4f6;
+            font-family: 'Inter', sans-serif;
             display: flex;
             align-items: center;
             justify-content: center;
@@ -25,161 +25,198 @@
             position: relative;
         }
 
-        /* Background Grid Efek Digital */
-        body::before {
-            content: '';
+        /* Background Grid Halus & Elegan */
+        .bg-overlay {
             position: absolute;
             top: 0; left: 0; width: 100%; height: 100%;
-            background: 
-                linear-gradient(rgba(18, 16, 16, 0) 50%, rgba(0, 0, 0, 0.25) 50%), 
-                linear-gradient(90deg, rgba(255, 0, 0, 0.06), rgba(0, 255, 0, 0.02), rgba(0, 0, 255, 0.06));
-            background-size: 100% 4px, 6px 100%;
+            background-image: 
+                linear-gradient(rgba(0, 242, 254, 0.03) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(0, 242, 254, 0.03) 1px, transparent 1px);
+            background-size: 40px 40px;
+            background-position: center;
+            z-index: 1;
+        }
+
+        /* Efek Cahaya Pendar (Glow) di Latar Belakang */
+        .bg-glow {
+            position: absolute;
+            top: 50%; left: 50%;
+            transform: translate(-50%, -50%);
+            width: 600px; height: 600px;
+            background: radial-gradient(circle, rgba(0, 114, 255, 0.15) 0%, rgba(0, 0, 0, 0) 70%);
             z-index: 2;
             pointer-events: none;
         }
 
-        /* Garis Scan Laser Bergerak */
-        body::after {
-            content: '';
-            position: absolute;
-            top: 0; left: 0; width: 100%; height: 100%;
-            background: linear-gradient(to bottom, rgba(0,255,204,0) 0%, rgba(0,255,204,0.1) 10%, rgba(0,255,204,0) 11%);
-            background-size: 100% 100%;
-            animation: scan 4s linear infinite;
-            z-index: 2;
-            pointer-events: none;
-        }
-
-        .cyber-container {
+        /* Kartu Utama Berbahan Kaca (Glassmorphism) */
+        .maintenance-card {
             position: relative;
+            width: 100%;
+            max-width: 600px;
+            padding: 50px 40px;
+            background: rgba(10, 17, 32, 0.75);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border: 1px solid rgba(0, 242, 254, 0.25);
+            border-radius: 12px;
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5), 0 0 30px rgba(0, 242, 254, 0.05);
             text-align: center;
-            max-width: 650px;
-            padding: 40px;
-            background: rgba(10, 10, 25, 0.85);
-            border: 2px solid #00ffcc;
-            box-shadow: 0 0 20px rgba(0, 255, 204, 0.2), inset 0 0 20px rgba(0, 255, 204, 0.1);
-            border-radius: 4px;
             z-index: 3;
         }
 
-        /* Sudut Dekoratif Khas Cyberpunk */
-        .cyber-container::before {
-            content: 'SYS_STATUS: OFF';
+        /* Dekorasi Geometris Sudut */
+        .decor-line {
             position: absolute;
-            top: -12px; left: 20px;
-            background: #05050a;
-            padding: 0 10px;
-            font-size: 12px;
-            color: #ff0055;
-            letter-spacing: 2px;
-            border: 1px solid #ff0055;
+            width: 15px; height: 15px;
+            border-color: #00f2fe;
+            border-style: solid;
         }
+        .tl { top: -1px; left: -1px; border-width: 2px 0 0 2px; border-top-left-radius: 12px; }
+        .tr { top: -1px; right: -1px; border-width: 2px 2px 0 0; border-top-right-radius: 12px; }
+        .bl { bottom: -1px; left: -1px; border-width: 0 0 2px 2px; border-bottom-left-radius: 12px; }
+        .br { bottom: -1px; right: -1px; border-width: 0 2px 2px 0; border-bottom-right-radius: 12px; }
 
-        /* Animasi Glitch pada Judul */
-        h1 {
-            font-family: 'Orbitron', sans-serif;
-            font-size: 2.5rem;
-            font-weight: 900;
+        /* Badge Resmi */
+        .status-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            background: rgba(0, 242, 254, 0.08);
+            border: 1px solid rgba(0, 242, 254, 0.3);
+            color: #00f2fe;
+            padding: 6px 16px;
+            border-radius: 20px;
+            font-size: 13px;
+            font-weight: 600;
+            letter-spacing: 1.5px;
             text-transform: uppercase;
-            letter-spacing: 4px;
-            color: #fff;
-            text-shadow: 0 0 10px #00ffcc, 2px 2px #ff0055, -2px -2px #00ffcc;
-            margin-bottom: 20px;
-            position: relative;
-        }
-
-        .subtitle {
-            font-family: 'Orbitron', sans-serif;
-            font-size: 1.1rem;
-            color: #ff0055;
-            letter-spacing: 3px;
             margin-bottom: 30px;
-            text-transform: uppercase;
+        }
+
+        /* Titik Berkedip (Pulse) */
+        .pulse-dot {
+            width: 8px; height: 8px;
+            background-color: #00f2fe;
+            border-radius: 50%;
+            box-shadow: 0 0 10px #00f2fe;
+            animation: pulse 1.8s infinite;
+        }
+
+        h1 {
+            font-size: 2.2rem;
+            font-weight: 600;
+            color: #ffffff;
+            letter-spacing: -0.5px;
+            margin-bottom: 16px;
         }
 
         p {
-            font-size: 1rem;
+            font-size: 15px;
+            color: #94a3b8;
             line-height: 1.6;
-            color: #a0aec0;
+            margin-bottom: 35px;
+            font-weight: 300;
+        }
+
+        /* Progress Bar Premium */
+        .progress-container {
             margin-bottom: 30px;
         }
 
-        /* Loading Bar Progress */
-        .progress-box {
+        .progress-track {
             width: 100%;
-            border: 1px solid #00ffcc;
-            padding: 4px;
-            margin-bottom: 25px;
-            background: rgba(0, 255, 204, 0.05);
+            height: 4px;
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 2px;
+            overflow: hidden;
+            position: relative;
         }
 
-        .progress-bar {
-            height: 20px;
-            background: linear-gradient(90deg, #ff0055, #00ffcc);
-            width: 78%; /* Angka progres */
-            animation: pulse 2s ease-in-out infinite;
+        .progress-fill {
+            height: 100%;
+            width: 82%; /* Progres */
+            background: linear-gradient(90deg, #0072ff, #00f2fe);
+            box-shadow: 0 0 12px rgba(0, 242, 254, 0.5);
+            border-radius: 2px;
         }
 
-        .status-text {
+        .meta-info {
             display: flex;
             justify-content: space-between;
-            font-size: 0.9rem;
-            color: #00ffcc;
-            margin-top: 5px;
+            font-family: 'JetBrains+Mono', monospace;
+            font-size: 12px;
+            color: #64748b;
+            margin-top: 10px;
+        }
+
+        .system-log {
+            font-family: 'JetBrains+Mono', monospace;
+            font-size: 11px;
+            color: #475569;
+            text-align: left;
+            background: rgba(0, 0, 0, 0.2);
+            padding: 14px;
+            border-radius: 6px;
+            border-left: 2px solid #0072ff;
         }
 
         .footer {
-            font-size: 0.8rem;
-            color: #4a5568;
-            margin-top: 20px;
-            letter-spacing: 1px;
+            margin-top: 40px;
+            font-size: 12px;
+            color: #475569;
+            letter-spacing: 0.5px;
         }
 
-        /* Animasi Keyframes */
-        @keyframes scan {
-            0% { background-position: 0 -100vh; }
-            100% { background-position: 0 100vh; }
-        }
-
+        /* Animasi */
         @keyframes pulse {
-            0%, 100% { opacity: 1; box-shadow: 0 0 10px rgba(0, 255, 204, 0.5); }
-            50% { opacity: 0.8; box-shadow: 0 0 4px rgba(0, 255, 204, 0.2); }
+            0% { transform: scale(0.9); opacity: 0.6; }
+            50% { transform: scale(1.1); opacity: 1; box-shadow: 0 0 14px rgba(0, 242, 254, 0.8); }
+            100% { transform: scale(0.9); opacity: 0.6; }
         }
 
-        /* Responsive */
-        @media (max-width: 768px) {
-            h1 { font-size: 1.8rem; }
-            .cyber-container { width: 90%; padding: 25px; }
+        @media (max-width: 640px) {
+            .maintenance-card { width: 90%; padding: 35px 20px; }
+            h1 { font-size: 1.7rem; }
         }
     </style>
 </head>
 <body>
 
-    <div class="cyber-container">
-        <h1>MAINTENANCE IN PROGRESS</h1>
-        
-        <div class="subtitle">// CORE SYSTEM OVERHAUL_</div>
-        
-        <p>
-            [WARNING] Developer sedang melakukan injeksi kode dan pembaruan enkripsi database untuk optimasi jaringan global. Akses pengguna ditangguhkan sementara waktu.
-        </p>
-        
-        <div class="progress-box">
-            <div class="progress-bar"></div>
-            <div class="status-text">
-                <span>LOADING_UPDATES... 78%</span>
-                <span>SECURE_MODE: ACTIVE</span>
+    <div class="bg-overlay"></div>
+    <div class="bg-glow"></div>
+
+    <div class="maintenance-card">
+        <div class="decor-line tl"></div>
+        <div class="decor-line tr"></div>
+        <div class="decor-line bl"></div>
+        <div class="decor-line br"></div>
+
+        <div class="status-badge">
+            <div class="pulse-dot"></div>
+            System Optimization
+        </div>
+
+        <h1>Peningkatan Infrastruktur</h1>
+        <p>Kami sedang melakukan pemeliharaan rutin berjadwal pada *core system* dan jaringan server untuk meningkatkan performa serta efisiensi enkripsi data.</p>
+
+        <div class="progress-container">
+            <div class="progress-track">
+                <div class="progress-fill"></div>
+            </div>
+            <div class="meta-info">
+                <span>STATUS: DEPLOYING_PATCH_v4.2</span>
+                <span>82% COMPLETE</span>
             </div>
         </div>
-        
-        <p style="font-size: 0.8rem; color: #ff0055; text-align: left; background: rgba(0,0,0,0.4); padding: 10px; border-left: 3px solid #ff0055;">
-            &gt; STAGE: RE-INDEXING_DB_CLUSTER<br>
-            &gt; TARGET: ALL_SERVICES_STABLE<br>
-            &gt; ESTIMATED_TIME: 3 HOURS
-        </p>
+
+        <div class="system-log">
+            &gt; SECURE CONNECTION: ACTIVE<br>
+            &gt; DATABASE MIGRATION: SUCCESSFUL<br>
+            &gt; INTEGRITY CHECKING... PLEASE WAIT
+        </div>
 
         <div class="footer">
-            © 2026 FATXEON.OFFICIAL // ALL RIGHTS RESERVED.
+            SECURE INFRASTRUCTURE BY CORPORATE FATXEON.OFFICIAL &copy; 2026
         </div>
     </div>
 

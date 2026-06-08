@@ -3,9 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>150.172.128 - Cyber QR Code Generator</title>
+    <title>150.172.128 - TikTok Downloader</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcode/1.5.1/qrcode.min.js"></script>
     <style>
         /* --- CORE CONFIG THEME --- */
         :root {
@@ -64,6 +63,15 @@
         
         .action-btn { width: 100%; padding: 14px; background: transparent; border: 1px solid var(--race-yellow); color: var(--race-yellow); font-weight: bold; cursor: pointer; text-transform: uppercase; font-size: 0.8rem; border-radius: 4px; }
         .action-btn:hover { background: rgba(255, 183, 0, 0.05); }
+        .action-btn:disabled { color: #444; border-color: #222; cursor: not-allowed; }
+
+        .progress-track { width: 100%; height: 4px; background: rgba(255,255,255,0.02); margin: 15px 0 5px 0; }
+        .progress-fill { height: 100%; width: 0%; background: var(--race-yellow); transition: width 0.3s ease; }
+        .progress-text { font-size: 0.7rem; color: var(--text-muted); }
+
+        .terminal-log { background: #060609; padding: 15px; height: 120px; overflow-y: auto; color: var(--text-neon); font-size: 0.7rem; border: 1px solid var(--border-color); border-radius: 4px; }
+        .log-line { margin-bottom: 4px; }
+        .log-error { color: var(--race-red); }
 
         .toast { position: fixed; bottom: 25px; left: 50%; transform: translateX(-50%); background: #0c0c14; border: 1px solid var(--race-yellow); padding: 12px 24px; color: #fff; z-index: 2000; transition: opacity 0.3s, visibility 0.3s; font-size: 0.75rem; display: flex; align-items: center; gap: 8px; border-radius: 4px; visibility: hidden; opacity: 0; }
     </style>
@@ -83,27 +91,31 @@
     <aside class="sidebar" id="sidebarMenu">
         <ul class="sidebar-menu">
             <li><a href="index.html">// DASHBOARD</a></li>
-            <li><a href="tiktok.html">// TIKTOK_DOWNLOADER</a></li>
-            <li><a href="qrcode.html" class="active">// QR_GENERATOR</a></li>
+            <li><a href="tiktok.html" class="active">// TIKTOK_DOWNLOADER</a></li>
+            <li><a href="qrcode.html">// QR_GENERATOR</a></li>
             <li><a href="telnet.html">// TELNET SERVER</a></li>
         </ul>
     </aside>
 
     <div class="wrapper">
         <header>
-            <h1>Cyber QR Code Generator</h1>
-            <p>[Modul enkripsi matriks dua dimensi]</p>
+            <h1>TikTok Downloader</h1>
+            <p>[Modul ekstraksi media tanpa watermark]</p>
         </header>
 
         <section class="view-section">
             <div class="glass-card">
                 <div class="input-group">
-                    <i class="fa-solid fa-qrcode input-icon"></i>
-                    <input type="text" class="input-box" id="qr-text" placeholder="Masukkan teks atau URL untuk matriks QR...">
+                    <i class="fa-solid fa-link input-icon"></i>
+                    <input type="text" class="input-box" id="tiktok-url" placeholder="Paste TikTok Link Di Sini...">
                 </div>
-                <button class="action-btn" onclick="generateMyQRCode()">GENERATE QR CODE</button>
+                <button class="action-btn" onclick="downloadTikTok()" id="downloadBtn">GET VIDEO</button>
+                <div class="progress-wrapper" id="progress-container" style="display: none;">
+                    <div class="progress-track"><div class="progress-fill" id="progress-fill"></div></div>
+                    <div class="progress-text" id="progress-text">Connecting...</div>
+                </div>
             </div>
-            <div class="glass-card" id="qr-result-section" style="display: none; text-align: center; background: #fff; padding: 20px; max-width: 240px; margin: 0 auto; border-radius: 6px;"><canvas id="qrcode-canvas" style="max-width: 100%;"></canvas></div>
+            <div class="terminal-log" id="log"><div class="log-line">> System Initialized & Ready...</div></div>
         </section>
     </div>
 
@@ -115,23 +127,35 @@
             document.getElementById('sidebarMenu').classList.toggle('active');
         }
 
-        function generateMyQRCode() {
-            const qrText = document.getElementById('qr-text').value.trim(); const canvas = document.getElementById('qrcode-canvas');
-            const toast = document.getElementById('toast');
-            const toastMsg = document.getElementById('toast-msg');
+        const utils = {
+            log: (msg, type = '') => {
+                const log = document.getElementById('log'); if (!log) return;
+                const line = document.createElement('div'); line.className = `log-line ${type === 'error' ? 'log-error' : ''}`;
+                line.innerText = `> ${msg}`; log.appendChild(line); log.scrollTop = log.scrollHeight;
+            },
+            toast: (msg) => {
+                const t = document.getElementById('toast'); const m = document.getElementById('toast-msg'); m.innerText = msg; t.style.visibility = 'visible'; t.style.opacity = '1';
+                setTimeout(() => { t.style.visibility = 'hidden'; t.style.opacity = '0'; }, 3000);
+            },
+            loading: (state) => {
+                const btn = document.getElementById('downloadBtn'); const prog = document.getElementById('progress-container');
+                if(state) { btn.disabled = true; btn.innerText = 'PROCESSING...'; prog.style.display = 'block'; } 
+                else { btn.disabled = false; btn.innerText = 'GET VIDEO'; prog.style.display = 'none'; }
+            },
+            progress: (pct, text) => { document.getElementById('progress-fill').style.width = pct + '%'; document.getElementById('progress-text').innerText = text; }
+        };
 
-            const triggerToast = (msg) => {
-                toastMsg.innerText = msg; toast.style.visibility = 'visible'; toast.style.opacity = '1';
-                setTimeout(() => { toast.style.visibility = 'hidden'; toast.style.opacity = '0'; }, 3000);
-            };
-
-            if (!qrText) return triggerToast("Masukkan text atau URL!");
-            if (typeof QRCode !== 'undefined') {
-                QRCode.toCanvas(canvas, qrText, { width: 200, margin: 1 }, function (err) {
-                    if (err) triggerToast("Generasi Gagal!"); else { document.getElementById('qr-result-section').style.display = 'block'; triggerToast("Matrix QR Created!"); }
-                });
-            }
+        async function downloadTikTok() {
+            const urlInput = document.getElementById('tiktok-url'); const url = urlInput.value.trim();
+            if (!url) return utils.toast("Paste link Tiktok terlebih dahulu!");
+            utils.loading(true); utils.progress(20, "Connecting Api Core Engine...");
+            try {
+                const res = await fetch(`https://www.tikwm.com/api/?url=${encodeURIComponent(url)}`);
+                const json = await res.json();
+                if(json.data) { utils.progress(100, "Done."); utils.log("Media structure extracted successfully.", "info"); } 
+                else { throw new Error("Server API response denied."); }
+            } catch(e) { utils.log(e.message, 'error'); utils.toast("Extraction Error"); } finally { utils.loading(false); }
         }
     </script>
 </body>
-</html>
+    </html>

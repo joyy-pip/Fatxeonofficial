@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>126.538.029</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        /* Desain Tema Utama */
+        :root { --bg-main: #060609; --bg-card: #0c0c14; --bg-sidebar: #09090e; --border-color: rgba(255, 255, 255, 0.06); --race-red: #ff2a4b; --race-yellow: #ffb700; --text-neon: #00ffaa; --text-muted: #78788a; --transition-speed: 0.25s; }
+        * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Courier New', Courier, monospace; }
+        body { background-color: var(--bg-main); color: #d8d8e0; padding-top: 95px; overflow-x: hidden; }
+        .navbar { position: fixed; top: 0; left: 0; width: 100%; height: 70px; background: #060609; border-bottom: 2px solid var(--race-red); display: flex; justify-content: space-between; align-items: center; padding: 0 25px; z-index: 1000; box-shadow: 0 4px 20px rgba(0,0,0,0.6); }
+        .navbar-brand { color: var(--race-yellow); font-size: 1.25rem; font-weight: bold; letter-spacing: 2px; text-transform: uppercase; }
+        .hamburger { width: 24px; height: 16px; display: flex; flex-direction: column; justify-content: space-between; cursor: pointer; z-index: 1001; }
+        .hamburger span { display: block; height: 2px; width: 100%; background-color: var(--race-yellow); transition: all var(--transition-speed); }
+        .hamburger.active span:nth-child(1) { transform: translateY(7px) rotate(45deg); background-color: var(--race-red); }
+        .hamburger.active span:nth-child(2) { opacity: 0; }
+        .hamburger.active span:nth-child(3) { transform: translateY(-7px) rotate(-45deg); background-color: var(--race-red); }
+        .sidebar { position: fixed; top: 0; left: -320px; width: 320px; height: 100%; background: var(--bg-sidebar); border-right: 2px solid var(--race-red); padding: 100px 20px 20px 20px; transition: left var(--transition-speed) cubic-bezier(0.4, 0, 0.2, 1); z-index: 999; }
+        .sidebar.active { left: 0; box-shadow: 20px 0 50px rgba(0,0,0,0.8); }
+        .sidebar-menu a { color: var(--text-muted); text-decoration: none; font-size: 0.85rem; font-weight: bold; display: block; padding: 12px 15px; border-radius: 4px; }
+        .sidebar-menu a:hover, .sidebar-menu a.active { color: #fff; background: rgba(255, 255, 255, 0.02); border: 1px solid rgba(255, 183, 0, 0.25); border-left: 4px solid var(--race-yellow); }
+        .wrapper { max-width: 600px; margin: 0 auto; padding: 0 20px 60px 20px; }
+        header { background: rgba(12, 12, 20, 0.6); border: 1px solid var(--race-yellow); padding: 20px 25px; border-radius: 6px; margin-bottom: 30px; }
+        header h1 { color: var(--race-yellow); font-size: 1.35rem; font-weight: bold; text-transform: uppercase;}
+        header p { color: var(--text-muted); font-size: 0.75rem; }
+
+        /* --- DOWNLOADER SPECIFIC --- */
+        .glass-card { background: var(--bg-card); border: 1px solid var(--border-color); border-radius: 6px; padding: 25px; margin-bottom: 20px; border-top: 2px solid var(--race-yellow); }
+        .input-box { width: 100%; padding: 14px; background: #060609; border: 1px solid var(--border-color); color: #fff; border-radius: 4px; font-family: monospace; font-size: 0.85rem; margin-bottom: 15px; outline: none; }
+        .input-box:focus { border-color: var(--race-yellow); }
+        .action-btn { width: 100%; padding: 14px; background: transparent; border: 1px solid var(--race-yellow); color: var(--race-yellow); font-weight: bold; cursor: pointer; text-transform: uppercase; border-radius: 4px; }
+        .action-btn:hover { background: rgba(255, 183, 0, 0.05); }
+
+        .search-results { margin-top: 20px; }
+        .result-item { display: flex; gap: 15px; background: #060609; border: 1px solid var(--border-color); padding: 12px; border-radius: 4px; margin-bottom: 10px; cursor: pointer; transition: 0.2s; }
+        .result-item:hover { border-color: var(--race-yellow); }
+        .result-item img { width: 100px; height: 75px; object-fit: cover; border-radius: 2px; border: 1px solid var(--border-color); }
+        .result-info h5 { font-size: 0.85rem; color: #fff; margin-bottom: 5px; }
+        .result-info p { font-size: 0.7rem; color: var(--text-muted); }
+
+        .media-player { display: none; margin-top: 20px; background: #060609; border: 1px solid var(--race-red); padding: 15px; border-radius: 4px; text-align: center; }
+        .media-player h4 { font-size: 0.9rem; color: var(--race-yellow); margin-bottom: 10px; }
+        audio { width: 100%; margin-top: 10px; }
+    </style>
+</head>
+<body>
+
+    <nav class="navbar">
+        <div class="navbar-brand">Server Telnet Fatxeon</div>
+        <div style="display: flex; align-items: center;">
+            <div class="sys-status"></div>
+            <div class="hamburger" id="hamburger-btn">
+                <span></span><span></span><span></span>
+            </div>
+        </div>
+    </nav>
+
+    <div class="sidebar" id="sidebar-panel">
+        <ul class="sidebar-menu">
+         <li><a href="index.html">// DASHBOARD</a></li>
+            <li><a href="tiktok.html">// TIKTOK_DOWNLOADER</a></li>
+            <li><a href="youtube.html" class="active">// YOUTUBE_DOWNLOADER</a></li>
+            <li><a href="qrcode.html">// QR_GENERATOR</a></li>
+            <li><a href="ip.html">// IP TRACKER</a></li>
+            <li><a href="telnet.html">// TELNET SERVER</a></li>
+        </ul>
+    </div>
+
+    <div class="wrapper">
+        <header>
+            <h1>YT Extract Engine</h1>
+            <p>Mencari, streaming, dan mengunduh audio konversi YouTube secara langsung.</p>
+        </header>
+
+        <div class="glass-card">
+            <input type="text" class="input-box" id="searchQuery" placeholder="Ketik kata kunci judul lagu atau link youtube...">
+            <button class="action-btn" id="searchBtn">SEARCH / EXTRACT</button>
+
+            <div class="media-player" id="mediaPlayer">
+                <h4 id="playTitle">Loading track...</h4>
+                <audio id="audioElement" controls></audio>
+            </div>
+
+            <div class="search-results" id="searchResults"></div>
+        </div>
+    </div>
+
+    <script>
+        const hamburgerBtn = document.getElementById('hamburger-btn');
+        const sidebarPanel = document.getElementById('sidebar-panel');
+        hamburgerBtn.addEventListener('click', () => {
+            hamburgerBtn.classList.toggle('active');
+            sidebarPanel.classList.toggle('active');
+        });
+
+        // Logika Fitur YouTube
+        const searchBtn = document.getElementById('searchBtn');
+        const searchQuery = document.getElementById('searchQuery');
+        const searchResults = document.getElementById('searchResults');
+        const mediaPlayer = document.getElementById('mediaPlayer');
+        const playTitle = document.getElementById('playTitle');
+        const audioElement = document.getElementById('audioElement');
+
+        searchBtn.addEventListener('click', async () => {
+            const query = searchQuery.value.trim();
+            if(!query) return;
+
+            searchResults.innerHTML = '<div style="color:var(--race-yellow); font-size:0.8rem">Searching Track Engine...</div>';
+            mediaPlayer.style.display = 'none';
+
+            try {
+                const res = await fetch(`https://widipe.com/youtube?search=${encodeURIComponent(query)}`);
+                const json = await res.json();
+                searchResults.innerHTML = '';
+
+                if(json.result && json.result.length > 0) {
+                    json.result.forEach(item => {
+                        const itemEl = document.createElement('div');
+                        itemEl.className = 'result-item';
+                        itemEl.innerHTML = `
+                            <img src="${item.thumbnail}" alt="thumb">
+                            <div class="result-info">
+                                <h5>${item.title}</h5>
+                                <p>Durasi: ${item.duration} | Channel: ${item.author.name}</p>
+                            </div>
+                        `;
+                        itemEl.addEventListener('click', () => playTrack(item.url, item.title));
+                        searchResults.appendChild(itemEl);
+                    });
+                } else {
+                    searchResults.innerHTML = '<div style="color:var(--race-red); font-size:0.8rem">Tidak ada hasil ditemukan.</div>';
+                }
+            } catch(e) {
+                searchResults.innerHTML = '<div style="color:var(--race-red); font-size:0.8rem">Error ekstraksi media API.</div>';
+            }
+        });
+
+        async function playTrack(url, title) {
+            playTitle.innerText = "Mengonversi: " + title;
+            mediaPlayer.style.display = 'block';
+            audioElement.src = '';
+
+            try {
+                const res = await fetch(`https://widipe.com/download/ytdl?url=${encodeURIComponent(url)}`);
+                const json = await res.json();
+                if(json.result && json.result.mp3) {
+                    playTitle.innerText = "Playing: " + title;
+                    audioElement.src = json.result.mp3;
+                    audioElement.play();
+                } else {
+                    playTitle.innerText = "Gagal memuat URL MP3 konversi.";
+                }
+            } catch(e) {
+                playTitle.innerText = "Error memproses berkas MP3.";
+            }
+        }
+    </script>
+</body>
+</html>

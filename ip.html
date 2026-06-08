@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>126.538.029</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        /* Desain Tema Utama */
+        :root { --bg-main: #060609; --bg-card: #0c0c14; --bg-sidebar: #09090e; --border-color: rgba(255, 255, 255, 0.06); --race-red: #ff2a4b; --race-yellow: #ffb700; --text-neon: #00ffaa; --text-muted: #78788a; --transition-speed: 0.25s; }
+        * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Courier New', Courier, monospace; }
+        body { background-color: var(--bg-main); color: #d8d8e0; padding-top: 95px; overflow-x: hidden; }
+        .navbar { position: fixed; top: 0; left: 0; width: 100%; height: 70px; background: #060609; border-bottom: 2px solid var(--race-red); display: flex; justify-content: space-between; align-items: center; padding: 0 25px; z-index: 1000; box-shadow: 0 4px 20px rgba(0,0,0,0.6); }
+        .navbar-brand { color: var(--race-yellow); font-size: 1.25rem; font-weight: bold; letter-spacing: 2px; text-transform: uppercase; }
+        .sys-status { font-size: 0.75rem; font-weight: bold; letter-spacing: 1px; color: var(--text-neon); margin-right: 20px; display: flex; align-items: center; gap: 6px; }
+        .hamburger { width: 24px; height: 16px; display: flex; flex-direction: column; justify-content: space-between; cursor: pointer; z-index: 1001; }
+        .hamburger span { display: block; height: 2px; width: 100%; background-color: var(--race-yellow); transition: all var(--transition-speed); }
+        .hamburger.active span:nth-child(1) { transform: translateY(7px) rotate(45deg); background-color: var(--race-red); }
+        .hamburger.active span:nth-child(2) { opacity: 0; }
+        .hamburger.active span:nth-child(3) { transform: translateY(-7px) rotate(-45deg); background-color: var(--race-red); }
+        .sidebar { position: fixed; top: 0; left: -320px; width: 320px; height: 100%; background: var(--bg-sidebar); border-right: 2px solid var(--race-red); padding: 100px 20px 20px 20px; transition: left var(--transition-speed) cubic-bezier(0.4, 0, 0.2, 1); z-index: 999; }
+        .sidebar.active { left: 0; box-shadow: 20px 0 50px rgba(0,0,0,0.8); }
+        .sidebar-menu { list-style: none; }
+        .sidebar-menu a { color: var(--text-muted); text-decoration: none; font-size: 0.85rem; font-weight: bold; display: block; padding: 12px 15px; border-radius: 4px; transition: all 0.2s ease; cursor: pointer; }
+        .sidebar-menu a:hover, .sidebar-menu a.active { color: #fff; background: rgba(255, 255, 255, 0.02); border: 1px solid rgba(255, 183, 0, 0.25); border-left: 4px solid var(--race-yellow); }
+        .wrapper { max-width: 600px; margin: 0 auto; padding: 0 20px 60px 20px; }
+        header { background: rgba(12, 12, 20, 0.6); border: 1px solid var(--race-yellow); padding: 20px 25px; border-radius: 6px; margin-bottom: 30px; }
+        header h1 { color: var(--race-yellow); font-size: 1.35rem; font-weight: bold; text-transform: uppercase;}
+        header p { color: var(--text-muted); font-size: 0.75rem; }
+
+        /* --- IP TRACKER SPECIFIC --- */
+        .glass-card { background: var(--bg-card); border: 1px solid var(--border-color); border-radius: 6px; padding: 25px; margin-bottom: 20px; border-top: 2px solid var(--race-red); }
+        .input-box { width: 100%; padding: 14px; background: #060609; border: 1px solid var(--border-color); color: #fff; border-radius: 4px; font-family: monospace; font-size: 0.85rem; margin-bottom: 15px; outline: none; }
+        .input-box:focus { border-color: var(--race-yellow); }
+        .action-btn { width: 100%; padding: 14px; background: transparent; border: 1px solid var(--race-yellow); color: var(--race-yellow); font-weight: bold; cursor: pointer; text-transform: uppercase; border-radius: 4px; }
+        .action-btn:hover { background: rgba(255, 183, 0, 0.05); }
+        
+        .ip-result { background: #060609; border: 1px solid var(--border-color); border-radius: 4px; padding: 15px; margin-top: 20px; display: none; }
+        .ip-item { display: flex; justify-content: space-between; padding: 10px 0; border-bottom: 1px solid rgba(255,255,255,0.03); font-size: 0.8rem; }
+        .ip-label { color: var(--text-muted); font-weight: bold; }
+        .ip-value { color: var(--text-neon); }
+        .loading { text-align: center; color: var(--race-yellow); font-size: 0.8rem; display: none; margin-top: 15px; }
+    </style>
+</head>
+<body>
+
+    <nav class="navbar">
+        <div class="navbar-brand">Server Telnet Fatxeon</div>
+          <div style="display: flex; align-items: center;">
+            <div class="sys-status"></div>
+            <div class="hamburger" id="hamburger-btn">
+                <span></span><span></span><span></span>
+            </div>
+        </div>
+    </nav>
+
+    <div class="sidebar" id="sidebar-panel">
+        <ul class="sidebar-menu">
+           <li><a href="index.html">// DASHBOARD</a></li>
+            <li><a href="tiktok.html">// TIKTOK_DOWNLOADER</a></li>
+            <li><a href="youtube.html">// YOUTUBE_DOWNLOADER</a></li>
+            <li><a href="qrcode.html">// QR_GENERATOR</a></li>
+            <li><a href="ip.html" class="active">// IP TRACKER</a></li>
+            <li><a href="telnet.html">// TELNET SERVER</a></li>
+        </ul>
+    </div>
+
+    <div class="wrapper">
+        <header>
+            <h1>IP Matrix Scanner</h1>
+            <p>Melacak detail informasi network lokasi IP Target secara real-time.</p>
+        </header>
+
+        <div class="glass-card">
+            <input type="text" class="input-box" id="ipInput" placeholder="Masukkan alamat IP (Biarkan kosong untuk IP Anda)...">
+            <button class="action-btn" id="trackBtn">SCAN NETWORK</button>
+            
+            <div class="loading" id="loadingState">PROSES SCANNING DATA MATRIX...</div>
+
+            <div class="ip-result" id="ipResult">
+                <div class="ip-item"><span class="ip-label">IP ADDRESS:</span><span class="ip-value" id="resIp">-</span></div>
+                <div class="ip-item"><span class="ip-label">KOTA:</span><span class="ip-value" id="resCity">-</span></div>
+                <div class="ip-item"><span class="ip-label">PROVINSI:</span><span class="ip-value" id="resRegion">-</span></div>
+                <div class="ip-item"><span class="ip-label">NEGARA:</span><span class="ip-value" id="resCountry">-</span></div>
+                <div class="ip-item"><span class="ip-label">ISP PROVIDER:</span><span class="ip-value" id="resIsp">-</span></div>
+                <div class="ip-item"><span class="ip-label">ZONA WAKTU:</span><span class="ip-value" id="resTz">-</span></div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const hamburgerBtn = document.getElementById('hamburger-btn');
+        const sidebarPanel = document.getElementById('sidebar-panel');
+        hamburgerBtn.addEventListener('click', () => {
+            hamburgerBtn.classList.toggle('active');
+            sidebarPanel.classList.toggle('active');
+        });
+
+        // Logika Tracker IP
+        const trackBtn = document.getElementById('trackBtn');
+        const ipInput = document.getElementById('ipInput');
+        const loadingState = document.getElementById('loadingState');
+        const ipResult = document.getElementById('ipResult');
+
+        trackBtn.addEventListener('click', async () => {
+            const ip = ipInput.value.trim();
+            loadingState.style.display = 'block';
+            ipResult.style.display = 'none';
+
+            try {
+                const url = ip ? `https://ipapi.co/${ip}/json/` : `https://ipapi.co/json/`;
+                const res = await fetch(url);
+                const data = await res.json();
+                
+                loadingState.style.display = 'none';
+                if(data.error) { alert("IP Tidak valid!"); return; }
+
+                document.getElementById('resIp').innerText = data.ip || '-';
+                document.getElementById('resCity').innerText = data.city || '-';
+                document.getElementById('resRegion').innerText = data.region || '-';
+                document.getElementById('resCountry').innerText = data.country_name || '-';
+                document.getElementById('resIsp').innerText = data.org || '-';
+                document.getElementById('resTz').innerText = data.timezone || '-';
+                
+                ipResult.style.display = 'block';
+            } catch(e) {
+                loadingState.style.display = 'none';
+                alert("Gagal melakukan pencarian network data.");
+            }
+        });
+    </script>
+</body>
+</html>

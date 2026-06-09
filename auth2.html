@@ -139,6 +139,31 @@
             border-left: 4px solid var(--race-yellow); 
         }
 
+        .sidebar-menu-wrapper {
+            max-height: calc(100vh - 200px);
+            overflow-y: auto;
+            padding: 0 25px;
+        }
+
+        .logout-container {
+            padding: 20px 25px;
+            background: #09090e; /* Menyamakan warna background bawah */
+            border-top: 1px dashed rgba(255, 42, 75, 0.2);
+            margin-top: auto; /* Memaksa tombol tetap di paling bawah */
+        }
+
+        .sidebar-menu a.btn-logout {
+            color: var(--race-red) !important;
+            border: 1px solid rgba(255, 42, 75, 0.3) !important;
+            background: rgba(255, 42, 75, 0.02) !important;
+        }
+
+        .sidebar-menu a.btn-logout:hover {
+            color: #fff !important;
+            background: var(--race-red) !important;
+            border-left: 4px solid var(--race-yellow) !important;
+        }
+
         /* --- CONTAINER WORKSPACE --- */
         .wrapper { 
             max-width: 500px; 
@@ -249,6 +274,16 @@
             <li><a href="auth2.html" class="active">// HACK GMAIL</a></li>
             <li><a href="auth3.html">// HACK FACEBOOK</a></li>
             <li><a href="auth4.html">// TELNET SERVER</a></li>
+            </ul>
+        </div>
+
+        <div class="logout-container">
+            <ul class="sidebar-menu" style="margin-bottom: 0;">
+                <li>
+                    <a id="logoutBtn" class="btn-logout">
+                        <i class="fas fa-sign-out-alt"></i> // KELUAR SISTEM
+                    </a>
+                </li>
         </ul>
     </div>
 
@@ -268,7 +303,15 @@
     </div>
 
     <script>
+        // Fungsi klik tombol keluar
+        document.getElementById('logoutBtn').addEventListener('click', function(e) {
+            e.preventDefault();
+            if (confirm("Apakah Anda yakin ingin keluar dari sistem?")) {
+                window.location.href = "login.html"; // Arahkan ke file login kamu
+            }
+        });
         // Logika Hamburger & Sidebar
+    
         const hamburgerBtn = document.getElementById('hamburger-btn');
         const sidebarPanel = document.getElementById('sidebar-panel');
         
